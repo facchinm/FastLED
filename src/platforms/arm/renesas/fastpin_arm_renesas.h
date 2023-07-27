@@ -23,7 +23,7 @@ public:
     typedef volatile uint16_t * port_ptr_t;
     typedef uint16_t port_t;
 
-    #define PORT ((R_PORT0_Type*)(_PORT))
+    #define FASTLED_PORT ((R_PORT0_Type*)(_PORT))
     #define digitalBspPinToPort(P)		   (P >> 8)
     #define digitalBspPinToBitMask(P)      (1 << (P & 0xFF))
 
@@ -41,28 +41,28 @@ public:
     inline static void setOutput() { pinMode(PIN, OUTPUT); } // TODO: perform MUX config { _PDDR::r() |= _MASK; }
     inline static void setInput() { pinMode(PIN, INPUT); } // TODO: preform MUX config { _PDDR::r() &= ~_MASK; }
 
-    inline static void hi() __attribute__ ((always_inline)) { PORT->POSR = digitalBspPinToBitMask(bspPin); }
-    inline static void lo() __attribute__ ((always_inline)) { PORT->PORR = digitalBspPinToBitMask(bspPin); }
-    inline static void set(FASTLED_REGISTER port_t val) __attribute__ ((always_inline)) { PORT->PODR = val; }
+    inline static void hi() __attribute__ ((always_inline)) { FASTLED_PORT->POSR = digitalBspPinToBitMask(bspPin); }
+    inline static void lo() __attribute__ ((always_inline)) { FASTLED_PORT->PORR = digitalBspPinToBitMask(bspPin); }
+    inline static void set(FASTLED_REGISTER port_t val) __attribute__ ((always_inline)) { FASTLED_PORT->PODR = val; }
 
     inline static void strobe() __attribute__ ((always_inline)) { toggle(); toggle(); }
 
-    inline static void toggle() __attribute__ ((always_inline)) { PORT->PODR & digitalBspPinToBitMask(bspPin) ? lo() : hi(); }
+    inline static void toggle() __attribute__ ((always_inline)) { FASTLED_PORT->PODR & digitalBspPinToBitMask(bspPin) ? lo() : hi(); }
 
     inline static void hi(FASTLED_REGISTER port_ptr_t port) __attribute__ ((always_inline)) { hi(); }
     inline static void lo(FASTLED_REGISTER port_ptr_t port) __attribute__ ((always_inline)) { lo(); }
     inline static void fastset(FASTLED_REGISTER port_ptr_t port, FASTLED_REGISTER port_t val) __attribute__ ((always_inline)) { *port = val; }
 
-    inline static port_t hival() __attribute__ ((always_inline)) { return PORT->PODR | digitalBspPinToBitMask(bspPin); }
-    inline static port_t loval() __attribute__ ((always_inline)) { return PORT->PODR & ~digitalBspPinToBitMask(bspPin); }
-    inline static port_ptr_t port() __attribute__ ((always_inline)) { return &PORT->PODR; }
-    inline static port_ptr_t sport() __attribute__ ((always_inline)) { return &PORT->POSR; }
-    inline static port_ptr_t cport() __attribute__ ((always_inline)) { return &PORT->PORR; }
+    inline static port_t hival() __attribute__ ((always_inline)) { return FASTLED_PORT->PODR | digitalBspPinToBitMask(bspPin); }
+    inline static port_t loval() __attribute__ ((always_inline)) { return FASTLED_PORT->PODR & ~digitalBspPinToBitMask(bspPin); }
+    inline static port_ptr_t port() __attribute__ ((always_inline)) { return &FASTLED_PORT->PODR; }
+    inline static port_ptr_t sport() __attribute__ ((always_inline)) { return &FASTLED_PORT->POSR; }
+    inline static port_ptr_t cport() __attribute__ ((always_inline)) { return &FASTLED_PORT->PORR; }
     inline static port_t mask() __attribute__ ((always_inline)) { return digitalBspPinToBitMask(bspPin); }
 
 };
 
-#define _FL_DEFPIN(PIN, bspPin, PORT) template<> class FastPin<PIN> : public _ARMPIN<PIN, bspPin, PORT> {};
+#define _FL_DEFPIN(PIN, bspPin, FASTLED_PORT) template<> class FastPin<PIN> : public _ARMPIN<PIN, bspPin, FASTLED_PORT> {};
 
 // Actual pin definitions
 #if defined(ARDUINO_UNOR4_WIFI)
