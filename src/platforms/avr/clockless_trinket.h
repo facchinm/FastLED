@@ -209,7 +209,7 @@ protected:
 				[e0] "r" (e0),							\
 				[e1] "r" (e1),							\
 				[e2] "r" (e2),							\
-				[PORT] ASM_VAR_PORT,                    \
+				[FASTLED_PORT] ASM_VAR_PORT,                    \
 				[O0] "M" (RGB_BYTE0(RGB_ORDER)),		\
 				[O1] "M" (RGB_BYTE1(RGB_ORDER)),		\
 				[O2] "M" (RGB_BYTE2(RGB_ORDER))		\
@@ -226,9 +226,9 @@ protected:
 
 // Note: the code in the else in HI1/LO1 will be turned into an sts (2 cycle, 2 word)
 // 1 cycle, write hi to the port
-#define HI1 FASTLED_SLOW_CLOCK_ADJUST if((int)(FastPin<DATA_PIN>::port())-0x20 < 64) { asm __volatile__("out %[PORT], %[hi]" ASM_VARS ); } else { *FastPin<DATA_PIN>::port()=hi; }
+#define HI1 FASTLED_SLOW_CLOCK_ADJUST if((int)(FastPin<DATA_PIN>::port())-0x20 < 64) { asm __volatile__("out %[FASTLED_PORT], %[hi]" ASM_VARS ); } else { *FastPin<DATA_PIN>::port()=hi; }
 // 1 cycle, write lo to the port
-#define LO1 if((int)(FastPin<DATA_PIN>::port())-0x20 < 64) { asm __volatile__("out %[PORT], %[lo]" ASM_VARS ); } else { *FastPin<DATA_PIN>::port()=lo; }
+#define LO1 if((int)(FastPin<DATA_PIN>::port())-0x20 < 64) { asm __volatile__("out %[FASTLED_PORT], %[lo]" ASM_VARS ); } else { *FastPin<DATA_PIN>::port()=lo; }
 
 #endif
 

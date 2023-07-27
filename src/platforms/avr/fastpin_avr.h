@@ -55,8 +55,8 @@ typedef volatile uint8_t & reg8_t;
 #if defined(AVR_ATtinyxy7) || defined(AVR_ATtinyxy6) || defined(AVR_ATtinyxy4) || defined(AVR_ATtinyxy2)
 
 // ATtiny series 0/1 and ATmega series 0
-#define _FL_IO(L,C) _RD8(PORT ## L ## _DIR); _RD8(PORT ## L ## _OUT); _RD8(PORT ## L ## _IN); _FL_DEFINE_PORT3(L, C, _R(PORT ## L ## _OUT));
-#define _FL_DEFPIN(_PIN, BIT, L) template<> class FastPin<_PIN> : public _AVRPIN<_PIN, 1<<BIT, _R(PORT ## L ## _OUT), _R(PORT ## L ## _DIR), _R(PORT ## L ## _IN)> {};
+#define _FL_IO(L,C) _RD8(FASTLED_PORT ## L ## _DIR); _RD8(FASTLED_PORT ## L ## _OUT); _RD8(FASTLED_PORT ## L ## _IN); _FL_DEFINE_PORT3(L, C, _R(FASTLED_PORT ## L ## _OUT));
+#define _FL_DEFPIN(_PIN, BIT, L) template<> class FastPin<_PIN> : public _AVRPIN<_PIN, 1<<BIT, _R(FASTLED_PORT ## L ## _OUT), _R(FASTLED_PORT ## L ## _DIR), _R(FASTLED_PORT ## L ## _IN)> {};
 
 #elif defined(__AVR_ATmega4809__)
 
@@ -67,8 +67,8 @@ typedef volatile uint8_t & reg8_t;
 #else
 
 // Others
-#define _FL_IO(L,C) _RD8(DDR ## L); _RD8(PORT ## L); _RD8(PIN ## L); _FL_DEFINE_PORT3(L, C, _R(PORT ## L));
-#define _FL_DEFPIN(_PIN, BIT, L) template<> class FastPin<_PIN> : public _AVRPIN<_PIN, 1<<BIT, _R(PORT ## L), _R(DDR ## L), _R(PIN ## L)> {};
+#define _FL_IO(L,C) _RD8(DDR ## L); _RD8(FASTLED_PORT ## L); _RD8(PIN ## L); _FL_DEFINE_PORT3(L, C, _R(FASTLED_PORT ## L));
+#define _FL_DEFPIN(_PIN, BIT, L) template<> class FastPin<_PIN> : public _AVRPIN<_PIN, 1<<BIT, _R(FASTLED_PORT ## L), _R(DDR ## L), _R(PIN ## L)> {};
 #endif
 
 // Pre-do all the port definitions
